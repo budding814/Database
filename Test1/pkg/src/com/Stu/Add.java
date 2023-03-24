@@ -1,0 +1,120 @@
+package com.Stu;
+
+import com.sql.Renewal;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.sql.*;
+
+public class Add extends JFrame{
+    JButton jbexit=new JButton("退出");
+    JButton jback=new JButton("确认");
+
+    Add(){
+        setTitle("添加学生信息");
+        Container c=getContentPane();
+        setSize(320, 400);// 窗体大小
+        setLayout(null);
+
+        JLabel j1=new JLabel("学号:");
+        JTextField jtf1=new JTextField(5);
+        JLabel j2=new JLabel("姓名:");
+        JTextField jtf2=new JTextField(5);
+        JLabel j3=new JLabel("年龄:");
+        JTextField jtf3=new JTextField(5);
+        JLabel j4=new JLabel("系号:");
+        JTextField jtf4=new JTextField(5);
+        JLabel j5=new JLabel("班级:");
+        JTextField jtf5=new JTextField(5);
+        JLabel j6=new JLabel("宿舍:");
+        JTextField jtf6=new JTextField(5);
+        Renewal r=new Renewal();
+        Connection con =r.getConnection();
+
+        int width=320;
+        int height=300;
+        Toolkit kit=Toolkit.getDefaultToolkit();
+        Dimension screenSize=kit.getScreenSize();
+        int screenWidth=screenSize.width;
+        int screenHeight=screenSize.height;
+        setLocation(screenWidth/2-width/2,screenHeight/2-height/2);
+
+        setVisible(true);
+        jbexit.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Choose c1=new Choose();
+                setVisible(false);
+            }
+        });
+        jback.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                    String Sno=jtf1.getText().trim();
+                    String Sname=jtf2.getText().trim();
+                    int Sage=Integer.parseInt(jtf3.getText());
+                    String Sdept=jtf4.getText().trim();
+                    String Sclass=jtf5.getText().trim();
+                    String Sdrom=jtf6.getText().trim();
+                try {
+                    Statement stmt=null;
+                    stmt=con.createStatement();
+                    String sql;
+                    sql="INSERT INTO Stu(Sno,Sname,Sage,Sdept,Sclass,Sdorm) VALUES(?,?,?,?,?,?)";
+                    PreparedStatement ps=null;
+                    ps=con.prepareStatement(sql);//添加数据预处理
+                    ps.setString(1, Sno);
+                    ps.setString(2, Sname);
+                    ps.setInt(3, Sage);
+                    ps.setString(4, Sdept);
+                    ps.setString(5, Sclass);
+                    ps.setString(6, Sdrom);
+                    System.out.printf(sql);
+                    ps.executeUpdate();//执行添加数据
+                    // 完成后关闭
+                    ps.close();
+                    stmt.close();
+                    con.close();
+                } catch (SQLException ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+        });
+        c.add(j1);
+        j1.setBounds(20,10,70,30);
+        c.add(jtf1);
+        jtf1.setBounds(60,10,200,30);
+        c.add(j2);
+        j2.setBounds(20,50,70,30);
+        c.add(jtf2);
+        jtf2.setBounds(60,50,200,30);
+        c.add(j3);
+        j3.setBounds(20,90,70,30);
+        c.add(jtf3);
+        jtf3.setBounds(60,90,200,30);
+        c.add(j4);
+        j4.setBounds(20,130,70,30);
+        c.add(jtf4);
+        jtf4.setBounds(60,130,200,30);
+        c.add(j5);
+        j5.setBounds(20,170,70,30);
+        c.add(jtf5);
+        jtf5.setBounds(60,170,200,30);
+        c.add(j6);
+        j6.setBounds(20,210,70,30);
+        c.add(jtf6);
+        jtf6.setBounds(60,210,200,30);
+        c.add(jback);
+        jback.setBounds(85,250,60,40);
+        c.add(jbexit);
+        jbexit.setBounds(155,250,60,40);
+
+    }
+
+    public static void main(String[] args) {
+        Add a=new Add();
+
+    }
+}
